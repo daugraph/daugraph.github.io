@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://daugraph.github.io/</id>
-    <title>daugraph</title>
-    <updated>2021-02-10T05:46:43.231Z</updated>
+    <title>DAUGRAPH</title>
+    <updated>2021-02-10T05:52:25.063Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://daugraph.github.io/"/>
     <link rel="self" href="https://daugraph.github.io/atom.xml"/>
     <logo>https://daugraph.github.io/images/avatar.png</logo>
     <icon>https://daugraph.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, daugraph</rights>
+    <rights>All rights reserved 2021, DAUGRAPH</rights>
     <entry>
         <title type="html"><![CDATA[Tensorflow PS 模式调研]]></title>
         <id>https://daugraph.github.io/post/BFHOGS5U1/</id>
