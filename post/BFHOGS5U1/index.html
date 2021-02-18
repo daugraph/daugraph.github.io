@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tensorflow PS 模式调研 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1612942013920">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1613652489891">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Tensorflow PS 模式调研 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -11,8 +11,10 @@
 
 
 
-    <meta name="description" content="Tensorflow PS 模式调研
-" />
+    <meta name="description" content="Tensorflow目前支持两种分布式训练模式：
+
+同步训练（Synchronous training）：各worker之间的训练步调（steps）一致；
+异步训练（Asynchronous training）：各worker之间的步调（s..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -22,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1612942013920" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1613652489891" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -89,7 +91,12 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>Tensorflow PS 模式调研</p>
+                <p>Tensorflow目前支持两种分布式训练模式：</p>
+<ul>
+<li>同步训练（Synchronous training）：各worker之间的训练步调（steps）一致；</li>
+<li>异步训练（Asynchronous training）：各worker之间的步调（steps）不严格同步。</li>
+</ul>
+<p>MultiWorkerMirroredStrategy是最常见的用于多机的同步训练实现，</p>
 
               </div>
               <div class="toc-container">
