@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://daugraph.github.io/</id>
     <title>daugraph</title>
-    <updated>2021-02-18T13:24:24.167Z</updated>
+    <updated>2021-02-19T11:24:22.447Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://daugraph.github.io/"/>
     <link rel="self" href="https://daugraph.github.io/atom.xml"/>
@@ -10,7 +10,7 @@
     <icon>https://daugraph.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, daugraph</rights>
     <entry>
-        <title type="html"><![CDATA[Tensorflow PS 模式调研]]></title>
+        <title type="html"><![CDATA[基于数据流的分布式机器学习系统]]></title>
         <id>https://daugraph.github.io/post/BFHOGS5U1/</id>
         <link href="https://daugraph.github.io/post/BFHOGS5U1/">
         </link>
