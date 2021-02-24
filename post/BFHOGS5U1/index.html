@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>基于数据流的分布式机器学习系统 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1614055368278">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1614177773963">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="基于数据流的分布式机器学习系统 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1614055368278" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1614177773963" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -100,7 +100,7 @@
 <p>在 multi-worker 训练下，数据集划分对于确保模型收敛性有重要意义。</p>
 <ul>
 <li>问题一：目前的数据集划分方式是什么？</li>
-<li>问题二：每个batch中，不同worker是否有使用到相同的训练样本？</li>
+<li>问题二：每个batch中，不同worker间是否有使用到相同的训练样本？</li>
 </ul>
 <p>基于数据流的分布式机器学习系统借鉴了<strong>基于DAG的大数据处理系统</strong>的灵活性，将计算任务描述成为一个有向无环的数据流图，图中的节点表示对数据的操作（计算或者通信），图中的边表示操作的依赖关系。系统自动提供对数据流图的分布式执行，因此用户所要关心的只是如何设计出适当的数据流图来表达想要执行的算法逻辑。</p>
 <p>下面我们将以数据流系统的代表Tensorflow中的数据流图为例介绍典型的数据流图。在Tensorflow中每个节点描述了一种运算符（比如矩阵的运算和特定的优化算子等），输入节点也可以看作是一种特殊的运算符，而边代表了节点之间的数据以及它们的流动方向。当系统接收到用户定义的数据流图后，首先对该数据流图进行优化，包括裁剪移除一些无用操作、内存优化等。然后根据分配算法，将图中计算节点分配到实际的运算设备上分布式地执行这些计算任务。系统引擎依据数据流图依次调度图中每个节点来执行相应任务。</p>
