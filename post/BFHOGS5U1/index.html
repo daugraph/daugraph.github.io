@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>基于数据流的分布式机器学习系统 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1614177773963">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1614304246213">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="基于数据流的分布式机器学习系统 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1614177773963" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1614304246213" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -103,7 +103,7 @@
 <li>问题二：每个batch中，不同worker间是否有使用到相同的训练样本？</li>
 </ul>
 <p>基于数据流的分布式机器学习系统借鉴了<strong>基于DAG的大数据处理系统</strong>的灵活性，将计算任务描述成为一个有向无环的数据流图，图中的节点表示对数据的操作（计算或者通信），图中的边表示操作的依赖关系。系统自动提供对数据流图的分布式执行，因此用户所要关心的只是如何设计出适当的数据流图来表达想要执行的算法逻辑。</p>
-<p>下面我们将以数据流系统的代表Tensorflow中的数据流图为例介绍典型的数据流图。在Tensorflow中每个节点描述了一种运算符（比如矩阵的运算和特定的优化算子等），输入节点也可以看作是一种特殊的运算符，而边代表了节点之间的数据以及它们的流动方向。当系统接收到用户定义的数据流图后，首先对该数据流图进行优化，包括裁剪移除一些无用操作、内存优化等。然后根据分配算法，将图中计算节点分配到实际的运算设备上分布式地执行这些计算任务。系统引擎依据数据流图依次调度图中每个节点来执行相应任务。</p>
+<p>下面我们将以数据流系统的代表Tensorflow中的数据流图为例介绍典型的数据流图。在Tensorflow中每个节点描述了一种运算符（比如矩阵的运算和特定的优化算子等），输入节点也可以看作是一种特殊的运算符，而边代表了节点之间的数据以及它们的流动方向。当系统接收到用户定义的数据流图后，首先对该数据流图进行优化，包括裁剪移除一些无用操作、内存优化等。然后根据分配算法，将图中计算节点分配到实际的运算设备上分布式地执行这些计算任务。系统引擎依据数据流图依次调度图中每个节点来执行相应的任务。</p>
 <p>当用户在一个数据流图中同时包含多路的训练逻辑，然后通过加入参数聚合节点来收集它们的模型更新结果，就可以完成分布式的训练逻辑。因此，从数据流的角度看，分布式机器学习只是某种数据流设计而已，并没有什么特别。从这个意义上讲，数据流架构要比参数服务器架构更加通用和灵活。</p>
 <p>Tensorflow有两种数据对象，分别是张量（Tensor）和变量（Variable）。模型参数在机器学习训练中不断被更新，因此属于变量。Tensorflow运算过程中所有需要存储下来的变量合在一起被成为<strong>图的状态</strong>。而数据流图中节点的输出（通常称为中间结果）一般是不可变的数据，属于张量。张量和变量一样都可以参与运算，不同的是张量作为中间值用过以后就释放了，而变量会被系统存储下来，在下一轮迭代中继续使用。</p>
 <p>MapReduce逻辑也可以表示成某种数据流图。但是相比而言，Tensorflow系统中数据流图与具体机器学习算法的结合更加紧密，并且底层操作的复用性和灵活性更强，用户可以基于底层操作搭建各式各样的算法模型，而不只是进行数据处理。</p>
