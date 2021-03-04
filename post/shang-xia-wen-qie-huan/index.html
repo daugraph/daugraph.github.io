@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>上下文切换 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1614693203064">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1614819990155">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="上下文切换 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -12,7 +12,7 @@
 
 
     <meta name="description" content="即使是单核处理器也支持多线程执行代码，CPU通过给每个线程分配CPU时间片来实现这个机制。时间片是CPU分配给各个线程的时间，因为时间片非常短，所以CPU通过不停地切换线程执行，让我们感觉多个线程是同时执行的，时间片一般是几十毫秒。
-..." />
+CPU..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -22,7 +22,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1614693203064" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1614819990155" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -90,6 +90,7 @@
             <div class="post-content-wrapper">
               <div class="post-content">
                 <p>即使是单核处理器也支持多线程执行代码，CPU通过给每个线程分配CPU时间片来实现这个机制。时间片是CPU分配给各个线程的时间，因为时间片非常短，所以CPU通过不停地切换线程执行，让我们感觉多个线程是同时执行的，时间片一般是几十毫秒。</p>
+<p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是在切换前会保存上一个任务的状态，以便在切换回这个任务时，可以再加载这个任务的状态。所以任务从保存到再加载的过程就是一次上下文切换。</p>
 
               </div>
               <div class="toc-container">
