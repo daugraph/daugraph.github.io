@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>垃圾回收器与内存分配策略 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1617021747071">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1617021830987">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="垃圾回收器与内存分配策略 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1617021747071" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1617021830987" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -95,7 +95,8 @@
 <p>即时在可达性分析算法中判定为不可达对象，也是“非死不可”的，这时候它们暂时还处于“缓行”阶段，要真正宣告一个对象死亡，至少要经历两次标记过程：</p>
 <ul>
 <li>如果对象在进行可达性分析后发现没有与GC Roots相连接的引用链，那它将会被第一次标记，随后进行一次筛选，筛选的条件是此对象是否有必要执行finalize()方法。加入对象没有override finalize() 方法，或者 finalize() 方法已经被虚拟机调用过，那么虚拟机将这两种情况都视为“没有必要执行”；</li>
-<li>如果这个对象被判定为有必要执行finalize()  方法，那么该对象将被放置在一个名为 F-Queue的队列中，并在稍后由一条虚拟机自动建立的、低调度等优先级的Finalizer线程去执行它们的finalize() 方法。这里所说的“执行”是指虚拟机会出发这个方法开始运行，但并不承诺一定会等待它运行结束。这样做的原因是，如果某个对象的fianlize() 方法执行缓慢，或者更极端地发生了死循环，将很可能导致F-Queue队列中的其他对象永久处于等待，甚至导致整个内存回收子系统的崩溃。如果要在finalize() 方法中拯救自己——只要重新与引用链上的任何一个对象建立关联即可，譬如把this关键字赋值给某个类变量或者对象的成员变量，那在第二次标记时它将被移出“即将回收”的集合。</li>
+<li>如果这个对象被判定为有必要执行finalize()  方法，那么该对象将被放置在一个名为 F-Queue的队列中，并在稍后由一条虚拟机自动建立的、低调度等优先级的Finalizer线程去执行它们的finalize() 方法。这里所说的“执行”是指虚拟机会出发这个方法开始运行，但并不承诺一定会等待它运行结束。这样做的原因是，如果某个对象的fianlize() 方法执行缓慢，或者更极端地发生了死循环，将很可能导致F-Queue队列中的其他对象永久处于等待，甚至导致整个内存回收子系统的崩溃。如果要在finalize() 方法中拯救自己——只要重新与引用链上的任何一个对象建立关联即可，譬如把this关键字赋值给某个类变量或者对象的成员变量，那在第二次标记时它将被移出“即将回收”的集合。<br>
+一个对象自救实例：</li>
 </ul>
 <pre><code class="language-java">public class FinalizeEscapeGC {
 
