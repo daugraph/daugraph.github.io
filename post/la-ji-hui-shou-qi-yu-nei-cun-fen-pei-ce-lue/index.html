@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>垃圾回收器与内存分配策略 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1617022689990">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1617028207292">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="垃圾回收器与内存分配策略 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1617022689990" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1617028207292" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -84,7 +84,7 @@
                 2021-03-29
               </span>
               <span>
-                3 min read
+                7 min read
               </span>
               
             </div>
@@ -136,8 +136,41 @@
 
     }
 }
-
 </code></pre>
+<h3 id="回收方法区">回收方法区</h3>
+<p>《Java虚拟机规范》中提到过可以不要求虚拟机在方法中实现垃圾回收，事实上也确实有未实现或未能完整实现方法区类型卸载的收集器存在。<br>
+方法区的垃圾回收主要回收两部分内容：废弃的常量和不再使用的类型。<br>
+回收废弃的常量与回收Java堆中的对象非常类似，不再赘述。<br>
+判断类型可以回收需要同时满足的条件：</p>
+<ul>
+<li>该类所有的实例都已经被回收（也就是Java堆中不存在该类及其任何派生类子类的实例）</li>
+<li>加载该类的类加载器已经被回收</li>
+<li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法</li>
+</ul>
+<h2 id="垃圾回收算法">垃圾回收算法</h2>
+<p>从如何判定对象消亡的角度出发，垃圾回收算法可以划分为“引用计数式垃圾收集器（Reference Counting GC）”和“追踪式垃圾收集器（Tracing GC）”两大类，这两类被称作“直接垃圾收集”和“间接垃圾收集”，主流的Java虚拟机中都没有涉及到“引用计数垃圾收集器”。</p>
+<h3 id="分代收集理论">分代收集理论</h3>
+<p>当前商业虚拟机的垃圾收集器，大多数都遵循了“分代收集”的理论进行设计，分代收集名为理论，实质是一套符合大多数程序实际运行情况的经验法则，它建立在两个分代假说上：</p>
+<ul>
+<li>弱分代假说（Weak Generational Hypothesis）：绝大多数对象朝生夕灭</li>
+<li>强分代假说（Strong Generational Hypothesis）：熬过多次GC的对象越难以消亡</li>
+</ul>
+<p>这两个分代假说共同奠定了多款常用的垃圾收集器的设计原则：收集器应该将堆划分出不同的区域，然后将回收对象根据其年龄分配到不同的区域中存储。显而易见，如果一个区域中大多数对象都是朝生夕灭，难以熬过垃圾收集过程的话，那么把它们集中放在一起，每次回收时只关注如何保存少量存活而不是去标记大量将要被回收的对象，就能以较低代价回收到大量的空间；如果剩下的都是难以消亡的对象，那么把它们集中在一起，虚拟机便可以使用较低的频率来回收这个区域，这就同时兼顾了垃圾收集的时间开销和内存空间的有效利用。</p>
+<p>在Java堆划分出不同的区域之后，垃圾收集器才可以每次只回收其中某一个或者某些部分的区域——因此才有了Minor GC、Major GC、Full GC这样的回收类型的划分；也才能够针对不同的区域设计不同的垃圾回收算法——因此发展出了标记-复制、标记-清除、标记-整理等针对性的垃圾回收算法。所有的这一切都始于分代收集理论。</p>
+<p>第三个分代假说：</p>
+<ul>
+<li>跨代引用假说：跨代引用相对于同代引用来说仅占极少数</li>
+</ul>
+<p>存在相互引用关系的两个对象，是应该倾向于同时生存或者同时消亡的。举个例子，如果某个新生代对象存在跨代引用，由于老年代对象难以消亡，该引用会使得新生代对象在收集时同样得以存活，进而在年龄增长后晋升到老年代中，这时跨代引用也随即被消除了。</p>
+<h3 id="标记-清除算法">标记-清除算法</h3>
+<p>这是最早出现也是最基础的垃圾回收算法，在1960年由Lisp之父 John McCarthy 所提出。首先标记出所有需要回收的对象，再统一回收掉被标记的对象，也可以反过来。</p>
+<p>缺点：</p>
+<ul>
+<li>执行效率不稳定：如果Java堆中存在大量需要被回收的对象(死亡对象)，必须进行大量标记和清除动作，导致标记和清除两个过程的执行效率都随着对象数量增长而降低；</li>
+<li>内存空间碎片化：标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致当以后在程序运行过程中需要分配较大对象时无法找到连续内存而不得不提前触发另一次垃圾收集动作。</li>
+</ul>
+<h3 id="标记-复制算法">标记-复制算法</h3>
+<p>为了解决标记-清除算法面对大量可回收对象执行效率低，1969年Fenichel提出了一种称为半区复制的垃圾收集算法，它将可用内存划分为大小相等的两块。</p>
 
               </div>
               <div class="toc-container">
@@ -147,6 +180,14 @@
 <li>
 <ul>
 <li><a href="#%E7%94%9F%E5%AD%98%E8%BF%98%E6%98%AF%E6%AD%BB%E4%BA%A1">生存还是死亡？</a></li>
+<li><a href="#%E5%9B%9E%E6%94%B6%E6%96%B9%E6%B3%95%E5%8C%BA">回收方法区</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95">垃圾回收算法</a>
+<ul>
+<li><a href="#%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86%E7%90%86%E8%AE%BA">分代收集理论</a></li>
+<li><a href="#%E6%A0%87%E8%AE%B0-%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95">标记-清除算法</a></li>
+<li><a href="#%E6%A0%87%E8%AE%B0-%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95">标记-复制算法</a></li>
 </ul>
 </li>
 </ul>
