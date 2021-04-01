@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>垃圾回收器与内存分配策略 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1617028207292">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1617275780551">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="垃圾回收器与内存分配策略 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1617028207292" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1617275780551" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -170,7 +170,7 @@
 <li>内存空间碎片化：标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致当以后在程序运行过程中需要分配较大对象时无法找到连续内存而不得不提前触发另一次垃圾收集动作。</li>
 </ul>
 <h3 id="标记-复制算法">标记-复制算法</h3>
-<p>为了解决标记-清除算法面对大量可回收对象执行效率低，1969年Fenichel提出了一种称为半区复制的垃圾收集算法，它将可用内存划分为大小相等的两块。</p>
+<p>为了解决标记-清除算法面对大量可回收对象执行效率低，1969年Fenichel提出了一种称为半区复制的垃圾收集算法，它将可用内存划分为大小相等的两块。1989年Andrew Appel提出了更优化的半区复制分代策略，现在称为Appel式回收。Hotspot虚拟机中的Serial、ParNew</p>
 
               </div>
               <div class="toc-container">
