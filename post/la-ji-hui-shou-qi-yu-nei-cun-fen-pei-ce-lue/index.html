@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>垃圾回收器与内存分配策略 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1617710699249">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1617715257662">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="垃圾回收器与内存分配策略 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1617710699249" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1617715257662" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -84,7 +84,7 @@
                 2021-03-29
               </span>
               <span>
-                7 min read
+                11 min read
               </span>
               
             </div>
@@ -170,7 +170,17 @@
 <li>内存空间碎片化：标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能会导致当以后在程序运行过程中需要分配较大对象时无法找到连续内存而不得不提前触发另一次垃圾收集动作。</li>
 </ul>
 <h3 id="标记-复制算法">标记-复制算法</h3>
-<p>为了解决标记-清除算法面对大量可回收对象执行效率低，1969年Fenichel提出了一种称为半区复制的垃圾收集算法，它将可用内存划分为大小相等的两块。1989年Andrew Appel提出了更优化的半区复制分代策略，现在称为Appel式回收。Hotspot虚拟机中的Serial、ParNew</p>
+<p>为了解决标记-清除算法面对大量可回收对象执行效率低，1969年Fenichel提出了一种称为半区复制的垃圾收集算法，它将可用内存划分为大小相等的两块。1989年Andrew Appel提出了更优化的半区复制分代策略，现在称为Appel式回收。Hotspot虚拟机中的Serial、ParNew等新生代收集器均采用了这种策略来设计新生代的内存布局。Appel式回收的具体做法式把新生代分为一块较大的Eden空间和两块较小的Survivor空间，每次分配内存只使用Eden和其中一块Survivor。发生垃圾搜集时，将Eden和Survivor中仍然存活的对象一次性复制到另外另一块Survivor空间上，然后直接清理掉Eden和已用过的那块Survivor空间。HotSpot虚拟机默认Eden和Survivor的大小比例是8:1，也即每次新生代空间中可用内存空间为整个新生代容量的90%。</p>
+<p>当Survivor空间不足以容纳一次Minor GC之后存活的对象时，就需要依赖其他内存区域进行分配担保（Handle Promotion）。通过分配担保机制直接进入老年代。</p>
+<h3 id="标记-整理算法">标记-整理算法</h3>
+<p>针对老年代对象的存亡特征，1974年Edward Lueders提出了另一种针对性的“标记-整理”（Mark-Compact）算法，其中的标记过程仍然与“标记-清除”一样，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向内存空间一端移动，然后直接清理掉边界以外的内存。</p>
+<p>移动存活对象，尤其是在老年代这种每次回收都有大量对象存活的区域，移动存活对象并更新所有引用这些对象的地方将会是一种极其负重的操作，而且这种对象移动操作必须全程暂停用户应用程序才能进行，这就更加让使用者不得不小心翼翼地权衡其弊端了，像这样的停顿被最初的虚拟机设计者形象地描述为“Stop The World”。</p>
+<p>但是如果跟标记-清除算法那样完全不考虑移动和整理存活对象的话，弥散于堆中的存活对象导致的空间碎片化问题就只能依赖更为复杂的内存分配器和内存访问器来解决。譬如通过“内存空闲分配链表”来解决内存分配问题，内存的访问是用户程序最频繁的操作，甚至没有之一，假如在这个环节上增加了额外的负担，势必会直接影响用户程序的吞吐量。</p>
+<p>是否移动对象各有优劣，HotSpot虚拟机里面关注用户吞吐量的Parallel Scavenge收集器是基于标记-整理算法的，而关注延迟的CMS收集器则是基于标记清除算法的，这也从侧面印证了这点。</p>
+<h2 id="hotspot算法实现细节">HotSpot算法实现细节</h2>
+<h3 id="根节点枚举">根节点枚举</h3>
+<p>我们以可达性分析算法中从GC Roots集合找引用链这个操作作为介绍虚拟机高效实现的第一个例子。固定可作为GC Roots的节点主要在全局性的引用（例如常量或类静态属性）与执行上下文（例如栈帧中的本地变量表）中，尽管目标明确，但查找过程要做到高效并非一件容易的事情，现在Java应用越做越大，光是方法区的大小就有数百上千兆，里面的类、常量等更是恒河沙数，要是逐个检查以这里为起源的引用肯定得消耗不少时间。</p>
+<p>迄今为止，所有收集器在根节点枚举这一步骤时都必须暂停用户线程的，因此毫无疑问跟节点枚举与之前提及的整理内存碎片一样会面临相似的“Stop The World”的困扰。现在可达性分析算法耗时最长的查找引用链的过程已经可以做到与用户线程一起并发，但根节点枚举始终还是必须在一个能保障一致性的快照中才得以进行——这里“一致性”的意思是整个枚举期间执行子系统看起来就像被冻结在某个时间点上，不会出现在分析过程中，根节点集合的对象引用关系还在不断变化的情况，若这点不能满足的话，分析结果准确性也就无法保证。这是导致垃圾回收过程必须停顿所有用户线程的一个重要原因，即使是号称停顿时间可控，或者（几乎）不会发生停顿的CMS、G1、ZGC等收集器，枚举根根节点时也是必须要停顿的。</p>
 
               </div>
               <div class="toc-container">
@@ -188,6 +198,12 @@
 <li><a href="#%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86%E7%90%86%E8%AE%BA">分代收集理论</a></li>
 <li><a href="#%E6%A0%87%E8%AE%B0-%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95">标记-清除算法</a></li>
 <li><a href="#%E6%A0%87%E8%AE%B0-%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95">标记-复制算法</a></li>
+<li><a href="#%E6%A0%87%E8%AE%B0-%E6%95%B4%E7%90%86%E7%AE%97%E6%B3%95">标记-整理算法</a></li>
+</ul>
+</li>
+<li><a href="#hotspot%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82">HotSpot算法实现细节</a>
+<ul>
+<li><a href="#%E6%A0%B9%E8%8A%82%E7%82%B9%E6%9E%9A%E4%B8%BE">根节点枚举</a></li>
 </ul>
 </li>
 </ul>
