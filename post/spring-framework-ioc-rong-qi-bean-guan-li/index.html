@@ -2,19 +2,19 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Spring Framework IOC容器 Bean管理 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618737502027">
+<title>Spring Framework IOC容器 Bean管理（XML方式） | daugraph</title>
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618742499237">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Spring Framework IOC容器 Bean管理 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Spring Framework IOC容器 Bean管理（XML方式） | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="基本注入
+    <meta name="description" content="XML基本注入
 基于 xml 配置文件的 Bean 管理有三种基本注入方式：基于 Setter 方法注入、基于有参构造方法注入、基于p命名空间注入
 &lt;!--  通过Setter方法注入  --&gt;
-&lt;bean id=&quot;b..." />
+&lt;bean id=&quo..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1618737502027" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1618742499237" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -77,21 +77,21 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Spring Framework IOC容器 Bean管理
+              Spring Framework IOC容器 Bean管理（XML方式）
             </h2>
             <div class="post-info">
               <span>
                 2021-04-18
               </span>
               <span>
-                7 min read
+                9 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h3 id="基本注入">基本注入</h3>
+                <h3 id="xml基本注入">XML基本注入</h3>
 <p>基于 xml 配置文件的 Bean 管理有三种基本注入方式：基于 Setter 方法注入、基于有参构造方法注入、基于p命名空间注入</p>
 <pre><code class="language-xml">&lt;!--  通过Setter方法注入  --&gt;
 &lt;bean id=&quot;book1&quot; class=&quot;com.company.po.Book&quot;&gt;
@@ -274,6 +274,29 @@ public void testDept() {
 第六步：使用对象
 第七步：销毁方法
 </code></pre>
+<h3 id="基于xml自动装配">基于XML自动装配</h3>
+<p>根据指定的装配规则（属性名称或者属性类型），Spring自动将匹配的属性值进行注入<br>
+Bean 标签属性autowire，包含两种方式：byName、byType</p>
+<h3 id="外部属性文件">外部属性文件</h3>
+<p>例如把数据库相关配置放在外部文件中</p>
+<pre><code class="language-java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
+
+    &lt;bean id=&quot;dataSource1&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot;&gt;
+        &lt;property name=&quot;driverClassName&quot; value=&quot;${jdbc.driverClass}&quot;/&gt;
+        &lt;property name=&quot;url&quot; value=&quot;${jdbc.url}&quot;/&gt;
+        &lt;property name=&quot;username&quot; value=&quot;${jdbc.username}&quot;/&gt;
+        &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;context:property-placeholder location=&quot;classpath:jdbc.properties&quot;/&gt;
+
+&lt;/beans&gt;
+</code></pre>
 
               </div>
               <div class="toc-container">
@@ -282,12 +305,14 @@ public void testDept() {
 <ul>
 <li>
 <ul>
-<li><a href="#%E5%9F%BA%E6%9C%AC%E6%B3%A8%E5%85%A5">基本注入</a></li>
+<li><a href="#xml%E5%9F%BA%E6%9C%AC%E6%B3%A8%E5%85%A5">XML基本注入</a></li>
 <li><a href="#%E5%86%85%E5%A4%96%E9%83%A8-bean-%E6%B3%A8%E5%85%A5">内外部 Bean 注入</a></li>
 <li><a href="#%E9%9B%86%E5%90%88%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5">集合属性注入</a></li>
 <li><a href="#factorybean">FactoryBean</a></li>
 <li><a href="#bean-%E4%BD%9C%E7%94%A8%E5%9F%9F">Bean 作用域</a></li>
 <li><a href="#bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">Bean 的生命周期</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8Exml%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D">基于XML自动装配</a></li>
+<li><a href="#%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6">外部属性文件</a></li>
 </ul>
 </li>
 </ul>
