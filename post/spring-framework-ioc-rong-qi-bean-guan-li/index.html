@@ -2,19 +2,20 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Spring Framework IOC容器 Bean管理（XML方式） | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618742499237">
+<title>Spring Framework IOC容器 Bean管理 | daugraph</title>
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618749609767">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Spring Framework IOC容器 Bean管理（XML方式） | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Spring Framework IOC容器 Bean管理 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="XML基本注入
+    <meta name="description" content="利用XML进行Bean管理
+基本注入
 基于 xml 配置文件的 Bean 管理有三种基本注入方式：基于 Setter 方法注入、基于有参构造方法注入、基于p命名空间注入
 &lt;!--  通过Setter方法注入  --&gt;
-&lt;bean id=&quo..." />
+&lt;b..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -24,7 +25,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1618742499237" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1618749609767" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -77,7 +78,7 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Spring Framework IOC容器 Bean管理（XML方式）
+              Spring Framework IOC容器 Bean管理
             </h2>
             <div class="post-info">
               <span>
@@ -91,7 +92,8 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h3 id="xml基本注入">XML基本注入</h3>
+                <h2 id="利用xml进行bean管理">利用XML进行Bean管理</h2>
+<h3 id="基本注入">基本注入</h3>
 <p>基于 xml 配置文件的 Bean 管理有三种基本注入方式：基于 Setter 方法注入、基于有参构造方法注入、基于p命名空间注入</p>
 <pre><code class="language-xml">&lt;!--  通过Setter方法注入  --&gt;
 &lt;bean id=&quot;book1&quot; class=&quot;com.company.po.Book&quot;&gt;
@@ -297,15 +299,32 @@ Bean 标签属性autowire，包含两种方式：byName、byType</p>
 
 &lt;/beans&gt;
 </code></pre>
+<h2 id="基于注解进行bean管理">基于注解进行Bean管理</h2>
+<p>注解的格式 @注解名称(属性名称=属性值)，可以简化配置</p>
+<h3 id="基于注解创建对象">基于注解创建对象</h3>
+<ol>
+<li>@Component</li>
+<li>@Service</li>
+<li>@Controller</li>
+<li>@Repository<br>
+以上四个注解功能是一样的</li>
+</ol>
+<h3 id="基于注解方式属性注入">基于注解方式属性注入</h3>
+<ol>
+<li>@Autowired：把对象根据属性类型</li>
+<li>@Qualifier：把对象根据属性名称</li>
+<li>@Resource：把对象根据属性类型或名称进行注入</li>
+<li>@Value：注入普通类型属性</li>
+</ol>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li>
+<li><a href="#%E5%88%A9%E7%94%A8xml%E8%BF%9B%E8%A1%8Cbean%E7%AE%A1%E7%90%86">利用XML进行Bean管理</a>
 <ul>
-<li><a href="#xml%E5%9F%BA%E6%9C%AC%E6%B3%A8%E5%85%A5">XML基本注入</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%B3%A8%E5%85%A5">基本注入</a></li>
 <li><a href="#%E5%86%85%E5%A4%96%E9%83%A8-bean-%E6%B3%A8%E5%85%A5">内外部 Bean 注入</a></li>
 <li><a href="#%E9%9B%86%E5%90%88%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5">集合属性注入</a></li>
 <li><a href="#factorybean">FactoryBean</a></li>
@@ -313,6 +332,12 @@ Bean 标签属性autowire，包含两种方式：byName、byType</p>
 <li><a href="#bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">Bean 的生命周期</a></li>
 <li><a href="#%E5%9F%BA%E4%BA%8Exml%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D">基于XML自动装配</a></li>
 <li><a href="#%E5%A4%96%E9%83%A8%E5%B1%9E%E6%80%A7%E6%96%87%E4%BB%B6">外部属性文件</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E8%BF%9B%E8%A1%8Cbean%E7%AE%A1%E7%90%86">基于注解进行Bean管理</a>
+<ul>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1">基于注解创建对象</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5">基于注解方式属性注入</a></li>
 </ul>
 </li>
 </ul>
