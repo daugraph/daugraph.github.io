@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Spring Framework IOC容器 Bean管理 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618736621106">
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618737502027">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Spring Framework IOC容器 Bean管理 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
@@ -11,10 +11,10 @@
 
 
 
-    <meta name="description" content="基于 xml 配置文件的 Bean 管理方式，下面分别是三种注入方式：基于 Setter 方法注入、基于有参构造方法注入、基于p命名空间注入
-基本注入方式
+    <meta name="description" content="基本注入
+基于 xml 配置文件的 Bean 管理有三种基本注入方式：基于 Setter 方法注入、基于有参构造方法注入、基于p命名空间注入
 &lt;!--  通过Setter方法注入  --&gt;
-&lt;bean id=..." />
+&lt;bean id=&quot;b..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -24,7 +24,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1618736621106" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1618737502027" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -91,8 +91,8 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>基于 xml 配置文件的 Bean 管理方式，下面分别是三种注入方式：基于 Setter 方法注入、基于有参构造方法注入、基于p命名空间注入</p>
-<h3 id="基本注入方式">基本注入方式</h3>
+                <h3 id="基本注入">基本注入</h3>
+<p>基于 xml 配置文件的 Bean 管理有三种基本注入方式：基于 Setter 方法注入、基于有参构造方法注入、基于p命名空间注入</p>
 <pre><code class="language-xml">&lt;!--  通过Setter方法注入  --&gt;
 &lt;bean id=&quot;book1&quot; class=&quot;com.company.po.Book&quot;&gt;
     &lt;property name=&quot;name&quot;&gt;
@@ -110,7 +110,7 @@
 &lt;!--  通过p命名空间注入  --&gt;
 &lt;bean id=&quot;book2&quot; class=&quot;com.company.po.Book&quot; p:author=&quot;古龙&quot; p:name=&quot;小鱼儿与花无缺&quot;/&gt;
 </code></pre>
-<h3 id="内部-与-外部-bean-注入方式">内部 与 外部 Bean 注入方式</h3>
+<h3 id="内外部-bean-注入">内外部 Bean 注入</h3>
 <p>外部 Bean 的注入方式</p>
 <pre><code class="language-xml">&lt;!-- 外部bean --&gt;
 &lt;bean id=&quot;userService&quot; class=&quot;com.company.service.UserService&quot;&gt;
@@ -163,7 +163,7 @@
     &lt;/property&gt;
 &lt;/bean&gt;
 </code></pre>
-<h3 id="factorybean-和-普通-bean">FactoryBean 和 普通 Bean</h3>
+<h3 id="factorybean">FactoryBean</h3>
 <p>除了普通 Bean之外，还有一种工厂Bean，又称 FactoryBean，返回的对象不是指定类的实例，而是该 FactoryBean的getObject方法返回的对象。</p>
 <ul>
 <li>普通 Bean：在配置文件中定义的Bean的类型就是返回类型</li>
@@ -230,42 +230,49 @@ public void testNamespace() {
 <ol>
 <li>通过无参数构造器创建Bean实例</li>
 <li>为Bean的属性设置值和其他Bean的引用</li>
+<li>把Bean的实例传递给Bean后置处理器的方法 postProcessBeforeInitialization</li>
 <li>调用Bean的初始化方法 — 需要配置 init-method</li>
-<li>Bean就可以使用了</li>
+<li>把Bean的实例传递给Bean后置处理器的方法 postProcessAfterInitialization</li>
+<li>使用Bean</li>
 <li>当容器关闭，调用Bean的销毁方法 — 需要配置 destroy-method</li>
 </ol>
 <pre><code class="language-xml">&lt;bean id=&quot;dept&quot; class=&quot;com.company.bean.Dept&quot; init-method=&quot;initMethod&quot; destroy-method=&quot;destroyMethod&quot;&gt;
     &lt;property name=&quot;name&quot; value=&quot;法务部&quot;/&gt;
 &lt;/bean&gt;
+
+&lt;!--  配置后置处理器，将会对当前配置文件中的所有Bean都添加后置处理器  --&gt;
+&lt;bean id=&quot;myPostBean&quot; class=&quot;com.company.bean.MyPostBean&quot;/&gt;
 </code></pre>
 <pre><code class="language-java">public class Dept {
     private String name;
 
-    public Dept() { System.out.println(&quot;无参数构造方法&quot;); }
+    public Dept() { System.out.println(&quot;第一步：无参数构造方法&quot;); }
 
     public void setName(String name) {
         this.name = name;
-        System.out.println(&quot;Set方法设置属性&quot;);
+        System.out.println(&quot;第二步：Set方法设置属性&quot;);
     }
 
-    public void initMethod() { System.out.println(&quot;初始化方法&quot;); }
-    public void destroyMethod() { System.out.println(&quot;销毁方法&quot;); }
+    public void initMethod() { System.out.println(&quot;第四步：初始化方法&quot;); }
+    public void destroyMethod() { System.out.println(&quot;第七步：销毁方法&quot;); }
 }
 </code></pre>
 <pre><code class="language-java">@Test
 public void testDept() {
     ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(&quot;bean6.xml&quot;);
     Dept dept = context.getBean(&quot;dept&quot;, Dept.class);
-    System.out.println(&quot;使用对象&quot;);
+    System.out.println(&quot;第六步：使用对象&quot;);
     context.close();
 }
 </code></pre>
 <p>最后输出结果：</p>
-<pre><code class="language-bash">无参数构造方法
-Set方法设置属性
-初始化方法
-使用对象
-销毁方法
+<pre><code class="language-bash">第一步：无参数构造方法
+第二步：Set方法设置属性
+第三步：在初始化之前执行的方法
+第四步：初始化方法
+第五步：在初始化之前执行的方法
+第六步：使用对象
+第七步：销毁方法
 </code></pre>
 
               </div>
@@ -275,10 +282,10 @@ Set方法设置属性
 <ul>
 <li>
 <ul>
-<li><a href="#%E5%9F%BA%E6%9C%AC%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F">基本注入方式</a></li>
-<li><a href="#%E5%86%85%E9%83%A8-%E4%B8%8E-%E5%A4%96%E9%83%A8-bean-%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F">内部 与 外部 Bean 注入方式</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%B3%A8%E5%85%A5">基本注入</a></li>
+<li><a href="#%E5%86%85%E5%A4%96%E9%83%A8-bean-%E6%B3%A8%E5%85%A5">内外部 Bean 注入</a></li>
 <li><a href="#%E9%9B%86%E5%90%88%E5%B1%9E%E6%80%A7%E6%B3%A8%E5%85%A5">集合属性注入</a></li>
-<li><a href="#factorybean-%E5%92%8C-%E6%99%AE%E9%80%9A-bean">FactoryBean 和 普通 Bean</a></li>
+<li><a href="#factorybean">FactoryBean</a></li>
 <li><a href="#bean-%E4%BD%9C%E7%94%A8%E5%9F%9F">Bean 作用域</a></li>
 <li><a href="#bean-%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F">Bean 的生命周期</a></li>
 </ul>
