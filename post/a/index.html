@@ -2,22 +2,17 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hello Gridea | daugraph</title>
+<title>A | daugraph</title>
 <link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618822838546">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Hello Gridea | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
+<link rel="alternate" type="application/atom+xml" title="A | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="👏  欢迎使用 Gridea ！
-✍️  Gridea 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意
-Github
-Gridea 主页
-示例网站
-特性👇
-📝  你可以使用最酷的 Markdown 语法，进行..." />
+    <meta name="description" content="训练 MNIST 模型
+python mnist_saved_model.py --work_dir=/home/hadoop/workspace/dataset/mnist --training_iteration=10000 --mod..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -80,11 +75,11 @@ Gridea 主页
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Hello Gridea
+              A
             </h2>
             <div class="post-info">
               <span>
-                2018-12-12
+                2021-04-19
               </span>
               <span>
                 2 min read
@@ -94,33 +89,44 @@ Gridea 主页
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意</p>
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+                <h3 id="训练-mnist-模型">训练 MNIST 模型</h3>
+<pre><code class="language-bash">python mnist_saved_model.py --work_dir=/home/hadoop/workspace/dataset/mnist --training_iteration=10000 --model_version=20210419 /home/hadoop/workspace/tensorflow-serving/models
+
+/home/hadoop/workspace/dataset/mnist 数据集所在目录
+10000 迭代次数
+20210419 生成的模型版本
+/home/hadoop/workspace/tensorflow-serving/models 模型保存路径
+</code></pre>
+<h3 id="启动-tensorflow-serving-服务">启动 TensorFlow Serving 服务</h3>
+<pre><code class="language-bash">sudo docker run -p 8500:8500 --mount type=bind,source=/home/hadoop/workspace/tensorflow-serving/models,target=/models/mnist -e MODEL_NAME=mnist -t tensorflow/serving
+
+8500:8500 主机端口:容器端口映射
+type=bind,source=/home/hadoop/workspace/tensorflow-serving/models,target=/models/mnist 将主机 /home/hadoop/workspace/tensorflow-serving/models 目录挂在到容器 /models/mnist
+MODEL_NAME=mnist 设置环境变量 MODEL_NAME, tensorflow/serving 镜像依赖该变量查找模型文件
+tensorflow/serving 目标镜像
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://daugraph.github.io//post-images/1618822800924.png" alt="" loading="lazy"></figure>
+<h3 id="测试-tensorflow-serving-服务">测试 TensorFlow Serving 服务</h3>
+<pre><code class="language-bash">python mnist_client.py  --num_tests=1000 --server=0.0.0.0:8500 --work_dir=/home/hadoop/workspace/dataset/mnist
+
+1000 测试的样本数
+0.0.0.0:8500 TensorFlow Serving 的地址
+home/hadoop/workspace/dataset/mnist 测试样本所在地址
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://daugraph.github.io//post-images/1618822824732.png" alt="" loading="lazy"></figure>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E7%89%B9%E6%80%A7">特性👇</a></li>
+<li>
+<ul>
+<li><a href="#%E8%AE%AD%E7%BB%83-mnist-%E6%A8%A1%E5%9E%8B">训练 MNIST 模型</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8-tensorflow-serving-%E6%9C%8D%E5%8A%A1">启动 TensorFlow Serving 服务</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95-tensorflow-serving-%E6%9C%8D%E5%8A%A1">测试 TensorFlow Serving 服务</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -130,6 +136,15 @@ Gridea 主页
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://daugraph.github.io/post/spring-framework-ioc-rong-qi-bean-guan-li/">
+              <h3 class="post-title">
+                Spring Framework IOC容器 Bean管理
+              </h3>
+            </a>
+          </div>
         
 
         
