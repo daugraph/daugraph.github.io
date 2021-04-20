@@ -2,24 +2,20 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | daugraph</title>
+<title>TensorFlow Serving 记录 | daugraph</title>
 <link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618925185904">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="关于 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
+<link rel="alternate" type="application/atom+xml" title="TensorFlow Serving 记录 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-欢迎来到我的小站呀，很高兴遇见你！🤝
-
-🏠 关于本站
-==
-👨‍💻 博主是谁
-⛹ 兴趣爱好
-📬 联系我呀
-..." />
+    <meta name="description" content="模型保存
+我们主要使用 Estimator API 进行模型训练，在模型保存接口中
+def export_saved_model(self,
+                        export_dir_base,
+        ..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -82,11 +78,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              TensorFlow Serving 记录
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2021-04-20
               </span>
               <span>
                 1 min read
@@ -96,24 +92,41 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p>==</p>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+                <h2 id="模型保存">模型保存</h2>
+<p>我们主要使用 Estimator API 进行模型训练，在模型保存接口中</p>
+<pre><code class="language-python">def export_saved_model(self,
+                        export_dir_base,
+                        serving_input_receiver_fn,
+                        assets_extra=None,
+                        as_text=False,
+                        checkpoint_path=None,
+                        experimental_mode=ModeKeys.PREDICT):
+
+if not serving_input_receiver_fn:
+    raise ValueError('An input_receiver_fn must be defined.')
+
+input_receiver_fn_map = {experimental_mode: serving_input_receiver_fn}
+
+return self._export_all_saved_models(
+    export_dir_base,
+    input_receiver_fn_map,
+    assets_extra=assets_extra,
+    as_text=as_text,
+    checkpoint_path=checkpoint_path,
+    strip_default_attrs=True)
+</code></pre>
+<p>有一个关键参数 serving_input_receiver_fn，用来指定将来使用 TensorFlow Serving 时 输入 Tensor 的类型</p>
+<h2 id="模型加载">模型加载</h2>
+<h2 id="模型预测">模型预测</h2>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD">⛹ 兴趣爱好</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#%E6%A8%A1%E5%9E%8B%E4%BF%9D%E5%AD%98">模型保存</a></li>
+<li><a href="#%E6%A8%A1%E5%9E%8B%E5%8A%A0%E8%BD%BD">模型加载</a></li>
+<li><a href="#%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B">模型预测</a></li>
 </ul>
 </li>
 </ul>
@@ -123,6 +136,15 @@
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://daugraph.github.io/post/a/">
+              <h3 class="post-title">
+                A
+              </h3>
+            </a>
+          </div>
         
 
         
