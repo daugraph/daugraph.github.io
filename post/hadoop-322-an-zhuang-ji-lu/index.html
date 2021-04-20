@@ -2,22 +2,22 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hadoop 3.2.2 安装记录 | daugraph</title>
-<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618925331353">
+<title>Hadoop 3.2.2 记录 | daugraph</title>
+<link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1618925845650">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Hadoop 3.2.2 安装记录 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Hadoop 3.2.2 记录 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="安装前注意
+    <meta name="description" content="安装前
 
 务必新建用户及用户组安装，千万不要用 root 用户，否则启动时会遇到非常多权限上的坑
 环境变量最好设置在 /etc/profile 中，用户目录下的 .bashrc 保持干净
 设置好免密登陆 SSH
 关闭系统防火墙
-安装成功..." />
+安装成功启动..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -27,7 +27,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://daugraph.github.io/">
-  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1618925331353" alt="">
+  <img class="avatar" src="https://daugraph.github.io//images/avatar.png?v=1618925845650" alt="">
   </a>
   <h1 class="site-title">
     daugraph
@@ -80,7 +80,7 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Hadoop 3.2.2 安装记录
+              Hadoop 3.2.2 记录
             </h2>
             <div class="post-info">
               <span>
@@ -94,7 +94,7 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h2 id="安装前注意">安装前注意</h2>
+                <h2 id="安装前">安装前</h2>
 <ol>
 <li>务必新建用户及用户组安装，<strong>千万不要用 root 用户</strong>，否则启动时会遇到非常多权限上的坑</li>
 <li>环境变量最好设置在 /etc/profile 中，用户目录下的 .bashrc 保持干净</li>
@@ -113,9 +113,7 @@
 <li>启动 YARN</li>
 </ol>
 <h2 id="相关配置">相关配置</h2>
-<ol>
-<li>/etc/profile</li>
-</ol>
+<p>/etc/profile</p>
 <pre><code class="language-bash">#set java environment
 export JAVA_HOME=/home/hadoop/opt/amazon-corretto-8.282.08.1-linux-x64
 export JRE_HOME=/home/hadoop/opt/amazon-corretto-8.282.08.1-linux-x64/jre
@@ -138,9 +136,7 @@ source ${HADOOP_HOME}/libexec/hadoop-config.sh
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${JAVA_HOME}/jre/lib/amd64/server
 export CLASSPATH=$(${HADOOP_HOME}/bin/hadoop classpath --glob)
 </code></pre>
-<ol start="2">
-<li>core-site.xml 配置</li>
-</ol>
+<p>core-site.xml 配置</p>
 <pre><code class="language-xml">&lt;configuration&gt;
 &lt;property&gt;
 &lt;name&gt;fs.defaultFS&lt;/name&gt;
@@ -152,14 +148,10 @@ export CLASSPATH=$(${HADOOP_HOME}/bin/hadoop classpath --glob)
 &lt;/property&gt;
 &lt;/configuration&gt;
 </code></pre>
-<ol start="3">
-<li>hadoop-env.sh 找到 JAVA_HOME 所在行并修改</li>
-</ol>
+<p>hadoop-env.sh 找到 JAVA_HOME 所在行并修改</p>
 <pre><code class="language-bash">export JAVA_HOME=/home/hadoop/opt/amazon-corretto-8.282.08.1-linux-x64
 </code></pre>
-<ol start="4">
-<li>hdfs-core.xml 配置</li>
-</ol>
+<p>hdfs-core.xml 配置</p>
 <pre><code class="language-xml">&lt;configuration&gt;
 &lt;property&gt;
 &lt;name&gt;dfs.replication&lt;/name&gt;
@@ -175,9 +167,7 @@ export CLASSPATH=$(${HADOOP_HOME}/bin/hadoop classpath --glob)
 &lt;/property&gt;
 &lt;/configuration&gt;
 </code></pre>
-<ol start="5">
-<li>yarn-site.xml 配置</li>
-</ol>
+<p>yarn-site.xml 配置</p>
 <pre><code class="language-xml">&lt;configuration&gt;
 &lt;property&gt;
 &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;
@@ -189,17 +179,13 @@ export CLASSPATH=$(${HADOOP_HOME}/bin/hadoop classpath --glob)
 &lt;/property&gt;
 &lt;/configuration&gt;
 </code></pre>
-<ol start="6">
-<li>workers 配置</li>
-</ol>
+<p>workers 配置</p>
 <pre><code class="language-bash">master-12ecb6f03
 worker-19b369d40-1
 worker-19b369d40-2
 worker-19b369d40-3
 </code></pre>
-<ol start="7">
-<li>mapred-site.xml 配置</li>
-</ol>
+<p>mapred-site.xml 配置</p>
 <pre><code class="language-xml">&lt;configuration&gt;
 &lt;property&gt;
 &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
@@ -216,15 +202,20 @@ worker-19b369d40-3
 &lt;property&gt;&lt;name&gt;mapreduce.reduce.env&lt;/name&gt;&lt;value&gt;HADOOP_MAPRED_HOME=$HADOOP_HOME&lt;/value&gt;&lt;/property&gt;
 &lt;/configuration&gt;
 </code></pre>
+<h2 id="测试">测试</h2>
+<p>提交 mapreduce 任务</p>
+<pre><code class="language-bash">hadoop jar ${HADOOP_HOME}/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.0.jar wordcount /input /output
+</code></pre>
 
               </div>
               <div class="toc-container">
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%AE%89%E8%A3%85%E5%89%8D%E6%B3%A8%E6%84%8F">安装前注意</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E5%89%8D">安装前</a></li>
 <li><a href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4">安装步骤</a></li>
 <li><a href="#%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE">相关配置</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95">测试</a></li>
 </ul>
 </li>
 </ul>
