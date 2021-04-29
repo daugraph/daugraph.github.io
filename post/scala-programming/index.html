@@ -2,16 +2,17 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Java内存模型 | daugraph</title>
+<title>Scala Programming | daugraph</title>
 <link rel="shortcut icon" href="https://daugraph.github.io//favicon.ico?v=1619694187249">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://daugraph.github.io//styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Java内存模型 | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
+<link rel="alternate" type="application/atom+xml" title="Scala Programming | daugraph - Atom Feed" href="https://daugraph.github.io//atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="《Java虚拟机规范》中曾试图定义一种“Java内存模型”（Java Memory Model）来屏蔽各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。在此之前，主流程序语言（如C和C++等）直接..." />
+    <meta name="description" content="
+许多语言都允许不是对象的值的存在，比如Java的基本类型，又或者允许不以任何对象的成员形式存在的静态字段和方法。这些对面向对象编程理念的背离在一开始看上去没什么不妥，但它们倾向于让事情变得复杂，限制了伸缩的可能。而在Scala中，它对面向..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -74,11 +75,11 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Java内存模型
+              Scala Programming
             </h2>
             <div class="post-info">
               <span>
-                2021-03-21
+                2021-04-29
               </span>
               <span>
                 1 min read
@@ -88,8 +89,11 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>《Java虚拟机规范》中曾试图定义一种“Java内存模型”（Java Memory Model）来屏蔽各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。在此之前，主流程序语言（如C和C++等）直接使用物理硬件和操作系统的内存模型，而在另外一套平台上并发访问却经常出错，所以在某些场景下必须针对不同的平台来编写程序。</p>
-<p>定义Java内存模型并非一件容易的事情，这个模型必须定义得足够严谨，才能让Java的并发访问操作不会产生歧义；但是也必须定义得足够宽松，使得虚拟机的实现能够有足够的自由空间去利用硬件的各种特性（寄存器、高速缓存和指令集中某些特有的指令）来获取更好的执行速度。经过长时间的验证和修补，直至JDK 5发布后，Java内存模型才终于成熟。</p>
+                <ul>
+<li>许多语言都允许不是对象的值的存在，比如Java的基本类型，又或者允许不以任何对象的成员形式存在的静态字段和方法。这些对面向对象编程理念的背离在一开始看上去没什么不妥，但它们倾向于让事情变得复杂，限制了伸缩的可能。而在Scala中，它对面向对象的实现是纯碎的：每个值都是对象，每个操作都是方法调用。例如：1 + 2</li>
+<li>Scala既是面向对象的，又是函数式的</li>
+<li>函数式编程的两个核心理念，第一个理念是函数是一等的值，第二个理念是程序中的操作应该将输入值映射成输出值而不是当场修改数据（另一种表述形式：方法不应该有副作用，方法只能通过接收入参和返回结果这两种方式与外部环境通信）</li>
+</ul>
 
               </div>
               <div class="toc-container">
@@ -102,9 +106,9 @@
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://daugraph.github.io/post/shang-xia-wen-qie-huan/">
+            <a href="https://daugraph.github.io/post/hadoop-322-an-zhuang-ji-lu/">
               <h3 class="post-title">
-                上下文切换
+                Hadoop 3.2.2 记录
               </h3>
             </a>
           </div>
